@@ -28,12 +28,20 @@ def determine_destination_folder(extension)
     'videos'
   when '.doc', '.docx', '.xls', '.xlsx'
     'documentos'
-  when '.zip', '.rar', '.7z'
+  when '.deb','.zip', '.rar', '.7z', '.tar','.gz','tgz','.AppImage'
     'comprimidos'
   when '.html', '.css', '.sql'
     'web'
   when '.kml','.kmz'
     'mapas'
+  when '.pdf'
+    'pdf'
+  when '.mp3'
+    'musica'
+  when '.tif'
+    '3d'
+  when '.run'
+    'programas'
   else
     "otros"
   end
@@ -46,8 +54,17 @@ def move_file(file_path, destination_path)
   FileUtils.mv(file_path, destination_file_path)
 end
 
-# Ruta de la carpeta de Descargas
-downloads_folder = File.expand_path('Descargas', Dir.home)
+loop do
+  puts "¿Qué carpeta deseas limpiar? (Escribe la ruta completa o 'salir' para finalizar)"
+  folder_path = gets.chomp
 
-organize_files(downloads_folder)
+  break if folder_path.downcase == 'salir'
 
+  folder_path = File.expand_path(folder_path, Dir.home)
+  if Dir.exist?(folder_path)
+    organize_files(folder_path)
+    puts "La carpeta ha sido organizada exitosamente."
+  else
+    puts "La carpeta no existe. Por favor, verifica la ruta e intenta nuevamente."
+  end
+end
